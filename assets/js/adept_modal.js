@@ -9,34 +9,18 @@ This file is the required Phoenix Hook to catch modal control events from the se
 
 */
 
-// Hooks.AdeptModal = {
-//   mounted() {
-//     this.handleEvent("modal_event", (e) => this.onModalEvent(e))
-//   },
+export {AdeptModalHook};
 
-//   onModalEvent( e ) {
-//     const detail = {}
-//     this.el.dispatchEvent( new CustomEvent(e.event, {
-//         detail,
-//         bubbles: true
-//     } ) )
-//   }
-// }
+let AdeptModalHook = {
+  mounted() {
+    this.handleEvent("modal_event", (e) => this.onModalEvent(e));
+  },
 
-class AdeptModal {
-  hook( hooks ) {
-    hooks.AdeptModal = {
-      mounted() {
-        this.handleEvent("modal_event", (e) => this.onModalEvent(e))
-      },
-
-      onModalEvent( e ) {
-        const detail = {}
-        this.el.dispatchEvent( new CustomEvent(e.event, {
-            detail,
-            bubbles: true
-        } ) )
-      }
-    }
+  onModalEvent( e ) {
+    const detail = {};
+    this.el.dispatchEvent( new CustomEvent(e.event, {
+        detail,
+        bubbles: true
+    } ) );
   }
 }
