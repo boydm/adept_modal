@@ -45,11 +45,13 @@ defmodule AdeptModalTest do
   end
 
   test "render works with defaults" do
-    %LiveView.Rendered{static: _} = Modal.render( %LiveView.Socket{}, :test_component, :test_id )
+    socket = %LiveView.Socket{}
+    %LiveView.Rendered{static: _} = Modal.render( socket, :test_component, :test_id )
   end
 
   test "render sets up opening div" do
-    %LiveView.Rendered{static: body} = Modal.render( %LiveView.Socket{}, :test_component, :test_id )
+    socket = %LiveView.Socket{}
+    %LiveView.Rendered{static: body} = Modal.render( socket, :test_component, :test_id )
     {:ok, html} = Floki.parse_document( body )
 
     # parse out the first element, which should be the opening div
@@ -60,5 +62,7 @@ defmodule AdeptModalTest do
     attrs = Enum.into(attrs, %{})
     assert Map.get(attrs, "phx-hook") ==  "AdeptModal"
     assert Map.get(attrs, "x-on:keydown.escape.window") ==  "adept_modal_is_open = false"
+    # assert Map.get(attrs, "x-on:adept-modal-show-test-id.window") ==  "adept_modal_is_open = true"
+    # assert Map.get(attrs, "x-on:adept-modal-hide-test-id.window") ==  "adept_modal_is_open = false"
   end
 end

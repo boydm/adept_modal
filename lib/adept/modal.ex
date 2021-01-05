@@ -1,12 +1,13 @@
 defmodule Adept.Modal do
   import Phoenix.LiveView.Helpers
   import Phoenix.LiveView.Utils
-  alias Phoenix.LiveView.Socket
+  alias Phoenix.LiveView
   alias Phoenix.HTML
 
   # import IEx
 
   #--------------------------------------------------------
+  @spec show_script(atom()) :: {:safe, String.t()}
   def show_script(id) when is_atom(id) or is_bitstring(id) do
     id
     |> event_name(:show)
@@ -14,6 +15,7 @@ defmodule Adept.Modal do
     |> HTML.raw()
   end
 
+  @spec hide_script(atom()) :: {:safe, String.t()}
   def hide_script(id) when is_atom(id) or is_bitstring(id) do
     id
     |> event_name(:hide)
@@ -22,16 +24,20 @@ defmodule Adept.Modal do
   end
 
   #--------------------------------------------------------
-  def push_show_event( %Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
+  @spec push_show_event(LiveView.Socket.t(), atom() | String.t()) :: Access.t()
+  def push_show_event( %LiveView.Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
     push_event( socket, "adept-modal-event", %{event: event_name(id, :show)} )
   end
 
-  def push_hide_event( %Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
+  @spec push_hide_event(LiveView.Socket.t(), atom() | String.t()) :: Access.t()
+  def push_hide_event( %LiveView.Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
     push_event( socket, "adept-modal-event", %{event: event_name(id, :hide)} )
   end
 
   #--------------------------------------------------------
-  def render( socket, component, id, opts \\ [] ) do
+  @spec render(LiveView.Socket.t(), atom(), atom() | String.t()) :: LiveView.Rendered.t()
+  def render( %LiveView.Socket{} = socket, component, id, opts \\ [] )
+  when (is_atom(id) or is_bitstring(id)) and is_atom(component) and component != nil and is_list(opts) do
     opts
     |> Keyword.put(:id, id)
     # sensible defaults
@@ -137,17 +143,11 @@ defmodule Adept.Modal do
   end
 
   #--------------------------------------------------------
-  defp dispatch_window_event( event_name, event_data \\ "{}" ) do
-    event_name
-    |> do_window_event( event_data )
-  end
-
-  defp do_window_event( event_name, %{} = event_data ) do
-    do_window_event( event_name, Jason.encode!(event_data ) )
-  end
-
-  defp do_window_event( event_name, event_data ) when is_bitstring(event_data) do
-    "$dispatch('#{event_name}', #{event_data})"
+  defp dispatch_window_event( event_name, event_data \\ %{} ) do
+    cond do
+      event_data == %{} -> "$dispatch('#{event_name}', {})"
+      %{} = event_data -> "$dispatch('#{event_name}', #{Jason.encode!(event_data)})"
+    end
   end
 
   #--------------------------------------------------------

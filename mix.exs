@@ -27,6 +27,7 @@ defmodule AdeptModal.MixProject do
 
       # test only tools
       {:floki, ">= 0.29.0", only: :test},
+      {:dialyxir, "~> 1.0", only: :dev}
     ]
   end
 end
