@@ -6,7 +6,6 @@ defmodule Adept.Modal do
   alias Phoenix.LiveView.Socket
   alias Phoenix.HTML
 
-
   #--------------------------------------------------------
   @doc """
   Renders a modal component.
@@ -22,23 +21,23 @@ defmodule Adept.Modal do
         link: @link,
         return_to: Routes.link_index_path(@socket, :index) %>
   """
-  def render( socket, component, id, opts ) when is_atom(id) or is_bitstring(id) do
-    inner_id = id
-    modal_id = to_string(inner_id) <> "__modal__"
+  # def render( socket, component, id, opts ) when is_atom(id) or is_bitstring(id) do
+  #   inner_id = id
+  #   modal_id = to_string(inner_id) <> "__modal__"
 
-    modal_opts = opts
-    |> Keyword.put(:id, modal_id)
-    |> Keyword.put(:inner_id, inner_id)
-    |> Keyword.put_new(:component, component)
-    # sensible defaults
-    |> Keyword.put_new(:show, false)
-    |> Keyword.put_new(:show_x, true)
-    |> Keyword.put_new(:return_to, nil)
-    |> Keyword.put_new(:opts, [])
-    |> Keyword.put_new(:inner_opts, [])
+  #   modal_opts = opts
+  #   |> Keyword.put(:id, modal_id)
+  #   |> Keyword.put(:inner_id, inner_id)
+  #   |> Keyword.put_new(:component, component)
+  #   # sensible defaults
+  #   |> Keyword.put_new(:show, false)
+  #   |> Keyword.put_new(:show_x, true)
+  #   |> Keyword.put_new(:return_to, nil)
+  #   |> Keyword.put_new(:opts, [])
+  #   |> Keyword.put_new(:inner_opts, [])
 
-    live_component(socket, __MODULE__, modal_opts)
-  end
+  #   live_component(socket, __MODULE__, modal_opts)
+  # end
 
   defp event_name( id, :show ), do: "adept-modal-show-" <> prep_event_name(id)
   defp event_name( id, :hide ), do: "adept-modal-hide-" <> prep_event_name(id)
@@ -89,22 +88,22 @@ defmodule Adept.Modal do
   end
 
   #--------------------------------------------------------
-  defp inner_component( assigns ) do
+  # defp inner_component( assigns ) do
 
-    opts = assigns.opts
-    |> Keyword.put_new( :id, assigns.inner_id )
-    |> Keyword.put_new( :show, assigns.show )
-    # |> Keyword.put_new( :hide_event, assigns.hide_event )
-    # |> Keyword.put_new( :show_event, assigns.show_event )
-    |> Keyword.put_new( :title, assigns.title )
-    |> Keyword.put_new( :return_to, assigns.return_to )
+  #   opts = assigns.opts
+  #   |> Keyword.put_new( :id, assigns.inner_id )
+  #   |> Keyword.put_new( :show, assigns.show )
+  #   # |> Keyword.put_new( :hide_event, assigns.hide_event )
+  #   # |> Keyword.put_new( :show_event, assigns.show_event )
+  #   |> Keyword.put_new( :title, assigns.title )
+  #   |> Keyword.put_new( :return_to, assigns.return_to )
 
-    live_component( assigns.socket, assigns.component, opts )
-  end
+  #   live_component( assigns.socket, assigns.component, opts )
+  # end
 
 
   #--------------------------------------------------------
-  def direct( socket, component, id, opts ) do
+  def render( socket, component, id, opts ) do
     opts = opts
     |> Keyword.put(:id, id)
     # sensible defaults
