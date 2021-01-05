@@ -48,7 +48,7 @@ defmodule AdeptModalTest do
     %LiveView.Rendered{static: _} = Modal.render( %LiveView.Socket{}, :test_component, :test_id )
   end
 
-  test "render sets up opening div with hooks event listeners" do
+  test "render sets up opening div" do
     %LiveView.Rendered{static: body} = Modal.render( %LiveView.Socket{}, :test_component, :test_id )
     {:ok, html} = Floki.parse_document( body )
 
@@ -58,28 +58,7 @@ defmodule AdeptModalTest do
 
     # inspect the attrs. somewhat simpler in map form
     attrs = Enum.into(attrs, %{})
-    # |> IO.inspect()
     assert Map.get(attrs, "phx-hook") ==  "AdeptModal"
     assert Map.get(attrs, "x-on:keydown.escape.window") ==  "is_open = false"
-    # assert Map.get(attrs, "x-on:adept-modal-show-test-id.window") ==  "is_open = true"
-    # assert Map.get(attrs, "x-on:adept-modal-hide-test-id.window") ==  "is_open = false"
-    # assert Map.get(attrs, "x-init") ==  "setTimeout(function() {is_open = true}, 100)"
   end
 end
-
-
-
-
-
-  # def render( socket, component, id, opts ) do
-
-
-  # #--------------------------------------------------------
-  # def push_show_event( %Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
-  #   push_event( socket, "adept-modal-event", %{event: event_name(id, :show)} )
-  # end
-
-  # def push_hide_event( %Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
-  #   push_event( socket, "adept-modal-event", %{event: event_name(id, :hide)} )
-  # end
-

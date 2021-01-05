@@ -1,6 +1,4 @@
 defmodule Adept.Modal do
-  # use Phoenix.LiveComponent
-
   import Phoenix.LiveView.Helpers
   import Phoenix.LiveView.Utils
   alias Phoenix.LiveView.Socket
@@ -52,17 +50,15 @@ defmodule Adept.Modal do
     <div
       x-data="{ is_open: false }"
       x-on:keydown.escape.window="is_open = false"
-
       phx-hook="AdeptModal"
-
       class="fixed z-10 inset-0 overflow-y-auto"
       x-show="is_open"
       x-on:<%=event_name(@id,:show)%>.window="is_open = true"
       x-on:<%=event_name(@id,:hide)%>.window="is_open = false"
       <%=
         case @show do
-          true -> "  x-init='setTimeout(function() {is_open = true}, 100)'" |> HTML.raw()
-          false -> "  x-init='setTimeout(function() {is_open = false}, 100)'" |> HTML.raw()
+          true -> "x-init='setTimeout(function() {is_open = true}, 100)'" |> HTML.raw()
+          false -> "x-init='setTimeout(function() {is_open = false}, 100)'" |> HTML.raw()
         end
       %>
     >
