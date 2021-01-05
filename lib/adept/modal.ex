@@ -106,11 +106,11 @@ defmodule Adept.Modal do
   #--------------------------------------------------------
   def direct( socket, component, id, opts ) do
     opts = opts
-    |> Map.put(:id, id)
+    |> Keyword.put(:id, id)
     # sensible defaults
-    |> Map.put_new(:show, false)
-    |> Map.put_new(:show_x, true)
-    |> Map.put_new(:return_to, nil)
+    |> Keyword.put_new(:show, false)
+    |> Keyword.put_new(:show_x, true)
+    |> Keyword.put_new(:return_to, nil)
 
     assigns = Enum.into(opts, %{})
 
