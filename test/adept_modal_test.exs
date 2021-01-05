@@ -59,6 +59,6 @@ defmodule AdeptModalTest do
     # inspect the attrs. somewhat simpler in map form
     attrs = Enum.into(attrs, %{})
     assert Map.get(attrs, "phx-hook") ==  "AdeptModal"
-    assert Map.get(attrs, "x-on:keydown.escape.window") ==  "is_open = false"
+    assert Map.get(attrs, "x-on:keydown.escape.window") ==  "adept_modal_is_open = false"
   end
 end

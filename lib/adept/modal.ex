@@ -48,17 +48,17 @@ defmodule Adept.Modal do
     # in and of itself as it doesn't track any independant state
     ~L"""
     <div
-      x-data="{ is_open: false }"
-      x-on:keydown.escape.window="is_open = false"
+      x-data="{ adept_modal_is_open: false }"
+      x-on:keydown.escape.window="adept_modal_is_open = false"
       phx-hook="AdeptModal"
       class="fixed z-10 inset-0 overflow-y-auto"
-      x-show="is_open"
-      x-on:<%=event_name(@id,:show)%>.window="is_open = true"
-      x-on:<%=event_name(@id,:hide)%>.window="is_open = false"
+      x-show="adept_modal_is_open"
+      x-on:<%=event_name(@id,:show)%>.window="adept_modal_is_open = true"
+      x-on:<%=event_name(@id,:hide)%>.window="adept_modal_is_open = false"
       <%=
         case @show do
-          true -> "x-init='setTimeout(function() {is_open = true}, 100)'" |> HTML.raw()
-          false -> "x-init='setTimeout(function() {is_open = false}, 100)'" |> HTML.raw()
+          true -> "x-init='setTimeout(function() {adept_modal_is_open = true}, 100)'" |> HTML.raw()
+          false -> "x-init='setTimeout(function() {adept_modal_is_open = false}, 100)'" |> HTML.raw()
         end
       %>
     >
@@ -66,7 +66,7 @@ defmodule Adept.Modal do
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0" >
         <%# Background overlay, show/hide based on modal state. %>
         <div
-          x-show="is_open"
+          x-show="adept_modal_is_open"
           class="fixed inset-0 transition-opacity"
           aria-hidden="<%= @show %>"
           x-transition:enter="ease-out duration-300"
@@ -84,7 +84,7 @@ defmodule Adept.Modal do
         
         <%# Modal panel, show/hide based on modal state. %>
         <div
-          x-show="is_open"
+          x-show="adept_modal_is_open"
           x-transition:enter="ease-out duration-300"
           x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
@@ -101,7 +101,7 @@ defmodule Adept.Modal do
             <div class="flex">
               <h2 class="flex-1 text-2xl"><%= @title %></h2>
 
-              <div class="flex-initial mt-0.5" @click="is_open = false" >
+              <div class="flex-initial mt-0.5" @click="adept_modal_is_open = false" >
                 <%= if @return_to do %>
                   <%= live_patch to: @return_to do %>
                     <div class="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-50 focus:ring-indigo-600">
