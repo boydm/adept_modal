@@ -126,8 +126,8 @@ defmodule Adept.Modal do
       id="<%= @id %>"
       class="fixed z-10 inset-0 overflow-y-auto"
       x-show="is_open"
-      x-on:<%=event_name(@inner_id,:show)%>.window="is_open = true"
-      x-on:<%=event_name(@inner_id,:hide)%>.window="is_open = false"
+      x-on:<%=event_name(@id,:show)%>.window="is_open = true"
+      x-on:<%=event_name(@id,:hide)%>.window="is_open = false"
       <%=
         case @show do
           true -> "  x-init='setTimeout(function() {is_open = true}, 100)'" |> HTML.raw()
