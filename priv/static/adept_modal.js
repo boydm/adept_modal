@@ -1,7 +1,7 @@
 export {AdeptModalHook};
 let AdeptModalHook = {
   mounted() {
-    this.handleEvent("modal_event", (e) => this.onModalEvent(e));
+    this.handleEvent("adept-modal-event", (e) => this.onModalEvent(e));
   },
   onModalEvent( e ) {
     const detail = {};

@@ -41,8 +41,8 @@ defmodule Adept.Modal do
     live_component(socket, __MODULE__, modal_opts)
   end
 
-  defp event_name( id, :show ), do: "modal-show-" <> prep_event_name(id)
-  defp event_name( id, :hide ), do: "modal-hide-" <> prep_event_name(id)
+  defp event_name( id, :show ), do: "adept-modal-show-" <> prep_event_name(id)
+  defp event_name( id, :hide ), do: "adept-modal-hide-" <> prep_event_name(id)
   defp prep_event_name( id ) when is_atom(id) or is_bitstring(id) do
     id
     |> to_string()
@@ -68,11 +68,11 @@ defmodule Adept.Modal do
 
   #--------------------------------------------------------
   def push_show_event( %Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
-    push_event( socket, "modal_event", %{event: event_name(id, :show)} )
+    push_event( socket, "adept-modal-event", %{event: event_name(id, :show)} )
   end
 
   def push_hide_event( %Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
-    push_event( socket, "modal_event", %{event: event_name(id, :hide)} )
+    push_event( socket, "adept-modal-event", %{event: event_name(id, :hide)} )
   end
 
   #--------------------------------------------------------
