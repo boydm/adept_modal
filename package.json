@@ -1,0 +1,19 @@
+{
+  "name": "adept_modal",
+  "version": "0.1.0",
+  "description": "LiveView Tailwind Alpinejs Modal Dialog.",
+  "license": "Apache 2",
+  "main": "./priv/static/adept_modal.js",
+  "author": "Boyd Multerer <boyd@multerer.com> (http://www.multerer.com)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/boydm/adept_modal.git"
+  },
+  "files": [
+    "README.md",
+    "LICENSE.md",
+    "package.json",
+    "priv/static/adept_modal.js",
+    "assets/js/adept_modal.js"
+  ]
+}
