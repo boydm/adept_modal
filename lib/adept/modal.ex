@@ -6,6 +6,8 @@ defmodule Adept.Modal do
   alias Phoenix.LiveView.Socket
   alias Phoenix.HTML
 
+  # import IEx
+
   #--------------------------------------------------------
   def show_script(id) when is_atom(id) or is_bitstring(id) do
     id
@@ -31,14 +33,17 @@ defmodule Adept.Modal do
   end
 
   #--------------------------------------------------------
-  def render( socket, component, id, opts ) do
-    opts = opts
+  def render( socket, component, id, opts \\ [] ) do
+    opts
     |> Keyword.put(:id, id)
     # sensible defaults
     |> Keyword.put_new(:show, false)
     |> Keyword.put_new(:show_x, true)
     |> Keyword.put_new(:return_to, nil)
+    |> do_render( socket, component )
+  end
 
+  defp do_render( opts, socket, component ) do
     assigns = Enum.into(opts, %{})
 
     # render the modal directly. doesn't need to be a component
@@ -67,7 +72,7 @@ defmodule Adept.Modal do
         <div
           x-show="is_open"
           class="fixed inset-0 transition-opacity"
-          aria-hidden="true"
+          aria-hidden="<%= @show %>"
           x-transition:enter="ease-out duration-300"
           x-transition:enter-start="opacity-0"
           x-transition:enter-end="opacity-100"
@@ -92,6 +97,7 @@ defmodule Adept.Modal do
           x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
           role="dialog"
           aria-modal="true"
+          aria-hidden="<%= @show %>"
           aria-labelledby="modal-headline"
           class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-<%= @size || "sm" %> sm:w-full sm:p-6"
         >

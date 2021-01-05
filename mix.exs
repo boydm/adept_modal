@@ -23,7 +23,10 @@ defmodule AdeptModal.MixProject do
     [
       {:phoenix_live_view, "~> 0.15"},
       {:phoenix_html, "~> 2.14"},
-      {:jason, "~> 1.2"}
+      {:jason, "~> 1.2"},
+
+      # test only tools
+      {:floki, ">= 0.29.0", only: :test},
     ]
   end
 end
