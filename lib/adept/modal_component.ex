@@ -71,8 +71,8 @@ defmodule Adept.ModalComponent do
       phx-hook="AdeptModal"
       class="fixed z-10 inset-0 overflow-y-auto"
       x-show="adept_modal_is_open"
-      x-on:<%=event_name(@id,:show)%>.window="adept_modal_is_open = true"
-      x-on:<%=event_name(@id,:hide)%>.window="adept_modal_is_open = false"
+      x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true"
+      x-on:<%=event_name(@inner_id,:hide)%>.window="adept_modal_is_open = false"
       <%=
         case @show do
           true -> "x-init='setTimeout(function() {adept_modal_is_open = true}, 100)'" |> HTML.raw()
