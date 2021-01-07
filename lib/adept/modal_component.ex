@@ -7,16 +7,21 @@ defmodule Adept.ModalComponent do
 
   #--------------------------------------------------------
   def live( socket, inner_component, opts ) do
-    id = Keyword.get(opts, :id)
+    inner_id = Keyword.get(opts, :id)
 
-    modal_id = id
+    modal_id = inner_id
     |> to_string()
     |> Kernel.<>("-adept-modal")
 
+    # the inner opts is the unchaged outer opts as passed in
+    inner_opts = opts
+
+    # build opts for the modal, but preserve the inner opts
     opts = opts
     |> Keyword.put( :id, modal_id )
-    |> Keyword.put( :inner_id, id )
+    |> Keyword.put( :inner_id, inner_id )
     |> Keyword.put( :inner_component, inner_component )
+    |> Keyword.put_new( :inner_opts, inner_opts )
 
     live_component( socket, __MODULE__, opts )
   end
@@ -156,16 +161,11 @@ defmodule Adept.ModalComponent do
 
   #--------------------------------------------------------
   defp inner_component( socket, assigns ) do
-    id = Map.get(assigns, :inner_id)
-    component = Map.get(assigns, :inner_component)
-
-    opts = assigns
-    |> Map.put( :id, id )
-    |> Map.delete( :inner_id )
-    |> Map.delete( :inner_component )
-    |> Enum.into([])
-
-    live_component( socket, component, opts )
+    live_component(
+      socket,
+      Map.get(assigns, :inner_component),
+      Map.get(assigns, :inner_opts)
+    )
   end
 
   #--------------------------------------------------------
@@ -187,9 +187,3 @@ defmodule Adept.ModalComponent do
   end
 
 end
-
-
-
-
-
-
