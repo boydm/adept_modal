@@ -66,8 +66,6 @@ defmodule Adept.ModalComponent do
   end
 
   defp do_render( assigns ) do
-    IO.puts("render show: #{inspect(assigns.show)}")
-
     # render the modal directly. doesn't need to be a component
     # in and of itself as it doesn't track any independant state
     ~L"""
