@@ -27,32 +27,31 @@ defmodule Adept.ModalComponent do
   end
 
   #--------------------------------------------------------
-  @spec show_script(atom()) :: {:safe, String.t()}
-  def show_script(id) when is_atom(id) or is_bitstring(id) do
-    id
-    |> event_name(:show)
-    |> dispatch_window_event()
-    |> HTML.raw()
+  @spec open(LiveView.Socket.t(), atom() | String.t()) :: Access.t()
+  def open( %LiveView.Socket{} = socket, id, opts \\ [] ) when is_atom(id) or is_bitstring(id) do
+    do_push_event( socket, event_name(id, :hide), opts ) 
   end
 
-  @spec hide_script(atom()) :: {:safe, String.t()}
-  def hide_script(id) when is_atom(id) or is_bitstring(id) do
-    id
-    |> event_name(:hide)
-    |> dispatch_window_event()
-    |> HTML.raw()
+  @spec close(LiveView.Socket.t(), atom() | String.t()) :: Access.t()
+  def close( %LiveView.Socket{} = socket, id, opts \\ [] ) when is_atom(id) or is_bitstring(id) do
+    do_push_event( socket, event_name(id, :hide), opts ) 
   end
 
-  #--------------------------------------------------------
-  @spec push_show_event(LiveView.Socket.t(), atom() | String.t()) :: Access.t()
-  def push_show_event( %LiveView.Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
-    push_event( socket, "adept-modal-event", %{event: event_name(id, :show)} )
+  defp do_push_event( socket, event_name, opts ) do
+    opts = cond do
+      path = opts[:return_to] ->
+        Process.send_after(self(), {:return_to, path}, 200, [] )
+        %{}
+      path = opts[:redirect_to] ->
+        %{redirect_to: path}
+      true ->
+        %{}
+    end
+    push_event( socket, "adept-modal-event", %{ event: event_name, opts: opts } )
   end
 
-  @spec push_hide_event(LiveView.Socket.t(), atom() | String.t()) :: Access.t()
-  def push_hide_event( %LiveView.Socket{} = socket, id ) when is_atom(id) or is_bitstring(id) do
-    push_event( socket, "adept-modal-event", %{event: event_name(id, :hide)} )
-  end
+  defp put_set( map, _, nil ), do: map
+  defp put_set( map, key, value ), do: Map.put( map, key, value )
 
   #--------------------------------------------------------
   @impl true
@@ -67,6 +66,8 @@ defmodule Adept.ModalComponent do
   end
 
   defp do_render( assigns ) do
+    IO.puts("render show: #{inspect(assigns.show)}")
+
     # render the modal directly. doesn't need to be a component
     # in and of itself as it doesn't track any independant state
     ~L"""
@@ -76,8 +77,13 @@ defmodule Adept.ModalComponent do
       phx-hook="AdeptModal"
       class="fixed z-10 inset-0 overflow-y-auto"
       x-show="adept_modal_is_open"
+      
+      adept-id="<%= prep_name(@inner_id) %>"
+      adept-show="<%= @show %>"
+
       x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true"
       x-on:<%=event_name(@inner_id,:hide)%>.window="adept_modal_is_open = false"
+      
       <%=
         case @show do
           true -> "x-init='setTimeout(function() {adept_modal_is_open = true}, 100)'" |> HTML.raw()
@@ -159,6 +165,7 @@ defmodule Adept.ModalComponent do
     """
   end
 
+
   #--------------------------------------------------------
   defp inner_component( socket, assigns ) do
     live_component(
@@ -169,17 +176,11 @@ defmodule Adept.ModalComponent do
   end
 
   #--------------------------------------------------------
-  defp dispatch_window_event( event_name, event_data \\ %{} ) do
-    cond do
-      event_data == %{} -> "$dispatch('#{event_name}', {})"
-      %{} = event_data -> "$dispatch('#{event_name}', #{Jason.encode!(event_data)})"
-    end
-  end
+  defp event_name( id, :show ), do: "adept-modal-show-" <> prep_name(id)
+  defp event_name( id, :hide ), do: "adept-modal-hide-" <> prep_name(id)
 
   #--------------------------------------------------------
-  defp event_name( id, :show ), do: "adept-modal-show-" <> prep_event_name(id)
-  defp event_name( id, :hide ), do: "adept-modal-hide-" <> prep_event_name(id)
-  defp prep_event_name( id ) when is_atom(id) or is_bitstring(id) do
+  defp prep_name( id ) when is_atom(id) or is_bitstring(id) do
     id
     |> to_string()
     |> String.trim()
