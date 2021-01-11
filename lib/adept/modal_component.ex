@@ -83,12 +83,10 @@ defmodule Adept.ModalComponent do
       x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true"
       x-on:<%=event_name(@inner_id,:hide)%>.window="adept_modal_is_open = false"
       
-      <%=
-        case @show do
-          true -> "x-init='setTimeout(function() {adept_modal_is_open = true}, 100)'" |> HTML.raw()
-          false -> "x-init='setTimeout(function() {adept_modal_is_open = false}, 100)'" |> HTML.raw()
-        end
-      %>
+      <%= case @show do %>
+        <% true -> %>x-init="setTimeout(function() {adept_modal_is_open = true}, 0)"
+        <% false -> %>x-init="setTimeout(function() {adept_modal_is_open = false}, 0)"
+      <% end %>
     >
 
       <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0" >
