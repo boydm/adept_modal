@@ -53,6 +53,16 @@ defmodule Adept.ModalComponent do
   defp put_set( map, _, nil ), do: map
   defp put_set( map, key, value ), do: Map.put( map, key, value )
 
+
+      # x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true; setTimeout( function() { $el.querySelector('[autofocus]').focus() }, 100 )"
+      # x-on:<%=event_name(@inner_id,:hide)%>.window="adept_modal_is_open = false"
+      
+      # <%= case @show do %>
+      #   <% true -> %>x-init="setTimeout(function() {adept_modal_is_open = true}, 100)"
+      #   <% false -> %>x-init="setTimeout(function() {adept_modal_is_open = false}, 100)"
+      # <% end %>
+
+
   #--------------------------------------------------------
   @impl true
   def render( assigns ) do
@@ -68,7 +78,7 @@ defmodule Adept.ModalComponent do
 
   defp do_render( assigns ) do
     # render the modal directly. doesn't need to be a component
-    # in and of itself as it doesn't track any independant state
+    # in and of itself as it doesn't track any independent state
     ~L"""
     <div
       x-data="{ adept_modal_is_open: false }"
@@ -76,16 +86,13 @@ defmodule Adept.ModalComponent do
       phx-hook="AdeptModal"
       class="fixed z-10 inset-0 overflow-y-auto"
       x-show="adept_modal_is_open"
-      
       adept-id="<%= prep_name(@inner_id) %>"
       adept-show="<%= @show %>"
-
-      x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true"
+      x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true; $nextTick( function() { $el.querySelector('[autofocus]').focus() } )"
       x-on:<%=event_name(@inner_id,:hide)%>.window="adept_modal_is_open = false"
-      
       <%= case @show do %>
-        <% true -> %>x-init="setTimeout(function() {adept_modal_is_open = true}, 0)"
-        <% false -> %>x-init="setTimeout(function() {adept_modal_is_open = false}, 0)"
+        <% true -> %>x-init="setTimeout(function() {adept_modal_is_open = true}, 100)"
+        <% false -> %>x-init="setTimeout(function() {adept_modal_is_open = false}, 100)"
       <% end %>
     >
 

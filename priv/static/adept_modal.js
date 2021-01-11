@@ -3,7 +3,7 @@ export {AdeptModalHook};
 let AdeptModalHook = {
   mounted() {
     // alert("mounted");
-    setTimeout(function() {this.onUpdate()}, 100);
+    // setTimeout(function() {this.onUpdate()}, 100);
     this.handleEvent("adept-modal-event", (e) => this.onModalEvent(e));
   },
 
@@ -29,10 +29,7 @@ let AdeptModalHook = {
   },
 
   dispatch( event_name ) {
-    const detail = {};
-    this.el.dispatchEvent( new CustomEvent(event_name, {
-        detail,
-        bubbles: true
-    } ) );
+    var detail = { bubbles: true };
+    this.el.dispatchEvent( new CustomEvent(event_name, detail) );
   }
 }
