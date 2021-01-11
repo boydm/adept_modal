@@ -88,7 +88,7 @@ defmodule Adept.ModalComponent do
       x-show="adept_modal_is_open"
       adept-id="<%= prep_name(@inner_id) %>"
       adept-show="<%= @show %>"
-      x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true; $nextTick( function() { $el.querySelector('[autofocus]').focus() } )"
+      x-on:<%=event_name(@inner_id,:show)%>.window="adept_modal_is_open = true; setTimeout( function() { $el.querySelector('[autofocus]').focus() }, 100 )"
       x-on:<%=event_name(@inner_id,:hide)%>.window="adept_modal_is_open = false"
       <%= case @show do %>
         <% true -> %>x-init="setTimeout(function() {adept_modal_is_open = true}, 100)"
