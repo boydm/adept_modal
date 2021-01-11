@@ -60,6 +60,7 @@ defmodule Adept.ModalComponent do
     # sensible defaults
     |> Map.put_new(:show, false)
     |> Map.put_new(:show_x, true)
+    |> Map.put_new(:title, nil)
     |> Map.put_new(:return_to, nil)
     |> Map.put_new(:size, "md")
     |> do_render()
@@ -124,16 +125,31 @@ defmodule Adept.ModalComponent do
           aria-labelledby="modal-headline"
           class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-<%= @size %> sm:w-full sm:p-6"
         >
-          <%= if @show_x do %>
+          <%= if @title || @show_x do %>
             <div class="flex">
-              <h2 class="flex-1 text-2xl"><%= @title %></h2>
 
-              <div class="flex-initial mt-0.5" @click="adept_modal_is_open = false" >
-                <%= if @return_to do %>
-                  <%= live_patch to: @return_to do %>
+              <%= if @title do %>
+                <h2 class="flex-1 text-2xl"><%= @title %></h2>
+              <% end %>
+
+              <%= if @show_x do %>
+                <div class="flex-initial mt-0.5" @click="adept_modal_is_open = false" >
+                  <%= if @return_to do %>
+                    <%= live_patch to: @return_to do %>
+                      <div class="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-50 focus:ring-indigo-600">
+                        <span class="sr-only">Dismiss</span>
+                        <!-- Heroicon x -->
+                        <svg
+                          class="h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                      </div>
+                    <% end %>
+                  <% else %>
                     <div class="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-50 focus:ring-indigo-600">
                       <span class="sr-only">Dismiss</span>
-                      <!-- Heroicon name: x -->
+                      <!-- Heroicon x -->
                       <svg
                         class="h-5 w-5"
                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -141,18 +157,8 @@ defmodule Adept.ModalComponent do
                       </svg>
                     </div>
                   <% end %>
-                <% else %>
-                  <div class="rounded-md p-1.5 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-indigo-50 focus:ring-indigo-600">
-                    <span class="sr-only">Dismiss</span>
-                    <!-- Heroicon name: x -->
-                    <svg
-                      class="h-5 w-5"
-                      xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                    </svg>
-                  </div>
-                <% end %>
-              </div>
+                </div>
+              <% end %>
 
             </div>
           <% end %>
