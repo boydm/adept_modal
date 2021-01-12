@@ -29,8 +29,14 @@ defmodule Adept.Modal do
 
   defp do_push_event( socket, event_name, opts ) do
     opts = cond do
+      path = opts[:to] ->
+        Process.send_after(self(), {:patch_to, path}, 200, [] )
+        %{}
       path = opts[:return_to] ->
-        Process.send_after(self(), {:return_to, path}, 200, [] )
+        Process.send_after(self(), {:patch_to, path}, 200, [] )
+        %{}
+      path = opts[:patch_to] ->
+        Process.send_after(self(), {:patch_to, path}, 200, [] )
         %{}
       path = opts[:redirect_to] ->
         %{redirect_to: path}
